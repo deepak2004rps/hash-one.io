@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/hash.css">
+    <title>Hash-One Generator</title>
+</head>
+<body>
+    <header>
+        <img src="../images/avv.png" class="avv" alt="AMRITA logo">
+        <h1>Hash-One: A light-weight cryptographic function</h1>
+        <img src="../images/cys.png" class="cys" alt="CYS logo">
+    </header>
+
+    <main>
+        <div class="container">
+            <!-- Generator Section -->
+            <div class="section generator-section">
+                <h2 style="text-align:center;">Generator</h2>
+                <form>
+                    <label for="fileInput">Upload a file (supports any smaller file type)</label>
+                    <input type="file" id="fileInput" accept="*/*" />
+                    <br>
+                    <br>
+                    <input type="button" value="Generate Hash" class="button" onclick="calculateHash()">
+                </form>
+            </div>
+
+            <!-- Verifier Section -->
+            <div class="section verifier-section">
+                <h2 style="text-align:center;">Verifier</h2>
+                <form>
+                    <label for="Verify_hash">Enter the hash value (binary or hex):</label>
+                    <input type="text" name="hash" id="Verify_hash" placeholder="Enter hash in binary (0s and 1s) or hexadecimal format">
+                    <br>
+                    <br>
+                    <input type="button" value="Verify" class="button" onclick="verifyHash()">
+                    <div id="verifyvalue" style="margin-top: 10px; font-weight: bold;"></div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Throbber/Loading Spinner -->
+    <div id="throbber" class="throbber-overlay">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Modal Dialog -->
+    <div id="dialog" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <p id="dialogMessage"></p>
+            <div id="dialogHash" class="hash-output-container"></div>
+            <div id="dialogButtons" class="dialog-buttons">
+                <button id="convertButton" class="button dialog-button">Convert to Hex</button>
+                <button id="copyButton" class="button dialog-button">Copy Bits</button>
+                <button id="closeDialogButton" class="button dialog-button">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div id="footer" class="footer">
+            <p>
+                Copyright © 2023.<br/> Deepak Kumar S<br>
+                B.Tech CSE(CYS)<br>
+                Part of 20CYS202 - User Interface Design and 20CYS205 - Modern cryptography <br>
+                Amrita Vishwa Vidyapeetham, Coimbatore.
+            </p>
+        </div>
+    </footer>
+
+    <script src="../js/hashNew.js"></script>
+</body>
+</html>

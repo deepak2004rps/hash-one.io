@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hash-One: Introduction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header {
+            background: #333;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            padding: 2rem 0;
+            flex-grow: 1;
+        }
+        .intro-box {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .intro-box h1 {
+            color: #007bff;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        .intro-box p {
+            font-size: 1.1em;
+            text-align: justify;
+            margin-bottom: 1.5rem;
+        }
+        .intro-box h2 {
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 0.5rem;
+            margin-top: 2rem;
+            color: #333;
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 2rem 0;
+        }
+        .feature-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #007bff;
+        }
+        .feature-card h3 {
+            color: #007bff;
+            margin-top: 0;
+        }
+        .call-to-action {
+            text-align: center;
+            margin: 3rem 0 2rem 0;
+            padding: 2rem;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            border-radius: 10px;
+            color: white;
+        }
+        .call-to-action h2 {
+            color: white;
+            border: none;
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
+        .button {
+            display: inline-block;
+            padding: 15px 30px;
+            background-color: white;
+            color: #007bff;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        .button:hover {
+            background-color: #f8f9fa;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        .specifications {
+            background: #e9ecef;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+        .spec-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            list-style: none;
+            padding: 0;
+        }
+        .spec-list li {
+            padding: 8px;
+            background: white;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .note-box {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+            margin-top: auto;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                width: 90%;
+                padding: 1rem 0;
+            }
+            .intro-box {
+                padding: 1.5rem;
+            }
+            header h1 {
+                font-size: 1.5em;
+            }
+            .button {
+                padding: 12px 24px;
+                font-size: 1.1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Hash-One: A Lightweight Cryptographic Hash Function</h1>
+        <p>Based on Sponge Construction with Non-Linear Feedback Shift Registers</p>
+    </header>
+    <div class="container">
+        <div class="intro-box">
+            <h1>Introduction to Hash-One</h1>
+            <p>Hash-One is a lightweight cryptographic hash function designed specifically for constrained devices such as RFID tags, wireless sensors, and other embedded systems. This implementation is based on the research paper <a href= "https://www.researchgate.net/publication/301331157_Hash-One_A_Lightweight_Cryptographic_Hash_Function">"Hash-One: a lightweight cryptographic hash function"</a> published in IET Information Security.</p>
+            
+            <p>The function uses a <strong>sponge construction</strong> methodology, which involves two main phases: the <strong>absorbing phase</strong> where input file bits are mixed with the internal state, and the <strong>squeezing phase</strong> where the final fixed-length hash is extracted from the altered internal state.</p>
+            
+            <h2>Key Features</h2>
+            <div class="features">
+                <div class="feature-card">
+                    <h3>Lightweight Design</h3>
+                    <p>Optimized for constrained devices with minimal hardware requirements (1006 Gate Equivalents).</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Strong Security</h3>
+                    <p>Provides 80-bit security against collision attacks and 160-bit preimage resistance.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Avalanche Effect</h3>
+                    <p>Even tiny changes in input result in completely different hash outputs.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Sponge Construction</h3>
+                    <p>Uses proven sponge methodology with non-linear feedback shift registers.</p>
+                </div>
+            </div>
+            
+            <h2>Technical Specifications</h2>
+            <div class="specifications">
+                <ul class="spec-list">
+                    <li>State Size: 161 bits</li>
+                    <li>Hash Output: 160 bits</li>
+                    <li>Capacity: 160 bits</li>
+                    <li>Rate: 1 bit</li>
+                    <li>Security Level: 80 bits</li>
+                    <li>Hardware Area: 1006 GE</li>
+                </ul>
+            </div>
+            
+            <h2>How It Works</h2>
+            <p>Hash-One utilizes two non-linear feedback shift registers (NFSRs) of sizes 80 and 81 bits. The security is based on a permutation function that updates these registers using carefully designed Boolean functions. The internal state is initialized with the first 161 bits of the mathematical constant π (pi), ensuring a strong cryptographic foundation.</p>
+            
+            <p>The algorithm processes input files bit by bit, mixing them with the internal state through XOR operations. The avalanche effect ensures that even the smallest change in input produces a completely different hash output, making it ideal for integrity verification and digital document authentication.</p>
+            
+            <div class="call-to-action">
+                <h2>Try Hash-One Generator !!!</h2>
+                <div class="note-box">
+                    <strong>Please Note:</strong> This implementation is a proof-of-concept and processes files bit-by-bit in the browser. For optimal performance, it is best suited for smaller files (less than 100 KB). Larger files may cause the browser to become unresponsive.
+                </div>
+                <p style="text-align: center;">Ready to generate secure hashes for your files? Click the button below to access the Hash-One generator tool.</p>
+                <a href="html/hashone_generator_final.html" class="button">Go to Hash Generator</a>
+            </div>
+        </div>
+    </div>
+    <footer>
+            <p>
+                Copyright © 2023.<br/> Deepak Kumar S<br>
+                B.Tech CSE(CYS)<br>
+                Part of 20CYS202 - User Interface Design and 20CYS205 - Modern cryptography <br>
+                Amrita Vishwa Vidyapeetham, Coimbatore.
+            </p>
+    </footer>
+</body>
+</html>
