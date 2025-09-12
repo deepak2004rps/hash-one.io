@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hash-One: Detailed Workflow Explanation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Navigation Header */
+        .nav-header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-links a.active {
+            background: rgba(255, 255, 255, 0.3);
+            font-weight: bold;
+        }
+
+        header {
+            background: rgba(51, 51, 51, 0.9);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+            overflow: hidden;
+            padding: 2rem 0;
+            flex-grow: 1;
+        }
+
+        .content-box {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .content-box h1 {
+            color: #007bff;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 2.5em;
+        }
+
+        .content-box h2 {
+            color: #007bff;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 0.5rem;
+            margin-top: 2.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 1.8em;
+        }
+
+        .content-box h3 {
+            color: #0056b3;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-size: 1.4em;
+        }
+
+        .content-box p {
+            font-size: 1.1em;
+            text-align: justify;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Step boxes for visual separation */
+        .step-box {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border-left: 5px solid #007bff;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .step-box h3 {
+            color: #007bff;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .step-number {
+            background: #007bff;
+            color: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        /* Mathematical formulas */
+        .formula-box {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            padding: 1.5rem;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+
+        /* Highlighted important text */
+        .highlight {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #ffc107;
+            margin: 1rem 0;
+        }
+
+        /* Algorithm specifications table */
+        .spec-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .spec-table th, .spec-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .spec-table th {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            font-weight: bold;
+        }
+
+        .spec-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        /* Lists styling */
+        .content-box ul, .content-box ol {
+            padding-left: 2rem;
+        }
+
+        .content-box li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Code blocks */
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        /* Visual diagram styles */
+        .diagram-container {
+            text-align: center;
+            margin: 2rem 0;
+            padding: 2rem;
+            background: linear-gradient(135deg, #e9ecef, #f8f9fa);
+            border-radius: 15px;
+        }
+
+        .nfsr-diagram {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+
+        .nfsr-box {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            min-width: 100px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .arrow {
+            font-size: 2em;
+            color: #007bff;
+            align-self: center;
+        }
+
+        footer {
+            background: rgba(51, 51, 51, 0.9);
+            backdrop-filter: blur(10px);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: auto;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 1rem 0;
+            }
+            
+            .content-box {
+                padding: 1.5rem;
+            }
+            
+            .nav-links {
+                flex-direction: column;
+                gap: 0.5rem;
+                text-align: center;
+            }
+            
+            .nfsr-diagram {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .spec-table {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-header">
+        <div class="nav-container">
+            <ul class="nav-links">
+                <li><a href="../index.html">🏠 Introduction</a></li>
+                <li><a href="hashone_generator_final.html">🔧 Generator Tool</a></li>
+                <li><a href="#" class="active">📚 Workflow Details</a></li>
+                <li><a href="../index.html#about">ℹ️ About Us</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <header>
+        <h1>Hash-One: Complete Workflow Explanation</h1>
+        <p>Detailed Technical Analysis of the Lightweight Cryptographic Hash Function</p>
+    </header>
+
+    <div class="container">
+        <div class="content-box">
+            <h1>Understanding Hash-One Algorithm</h1>
+            
+            <p>Hash-One is a lightweight cryptographic hash function designed specifically for constrained devices such as RFID tags, wireless sensors, and IoT devices. Based on the sponge construction methodology, it provides a secure and efficient solution for resource-limited environments.</p>
+
+            <div class="highlight">
+                <strong>🎯 Key Objective:</strong> To create a cryptographic hash function that maintains security while minimizing hardware requirements, making it suitable for devices with limited computational resources.
+            </div>
+
+            <h2>🏗️ Algorithm Specifications</h2>
+            <table class="spec-table">
+                <tr>
+                    <th>Parameter</th>
+                    <th>Value</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>State Size</td>
+                    <td>161 bits</td>
+                    <td>Total internal state size</td>
+                </tr>
+                <tr>
+                    <td>Hash Output</td>
+                    <td>160 bits</td>
+                    <td>Final hash digest length</td>
+                </tr>
+                <tr>
+                    <td>Capacity (c)</td>
+                    <td>160 bits</td>
+                    <td>Security parameter in sponge construction</td>
+                </tr>
+                <tr>
+                    <td>Rate (r)</td>
+                    <td>1 bit</td>
+                    <td>Input absorption rate per round</td>
+                </tr>
+                <tr>
+                    <td>Security Level</td>
+                    <td>80 bits</td>
+                    <td>Resistance against collision attacks</td>
+                </tr>
+                <tr>
+                    <td>Hardware Area</td>
+                    <td>1006 GE</td>
+                    <td>Gate Equivalents for hardware implementation</td>
+                </tr>
+                <tr>
+                    <td>NFSR P Size</td>
+                    <td>80 bits</td>
+                    <td>First Non-linear Feedback Shift Register</td>
+                </tr>
+                <tr>
+                    <td>NFSR Q Size</td>
+                    <td>81 bits</td>
+                    <td>Second Non-linear Feedback Shift Register</td>
+                </tr>
+            </table>
+
+            <h2>🔄 Sponge Construction Overview</h2>
+            
+            <p>Hash-One employs the sponge construction, a cryptographic framework that operates in two distinct phases:</p>
+
+            <div class="diagram-container">
+                <h3>Sponge Construction Phases</h3>
+                <div style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin: 20px 0;">
+                    <div style="text-align: center;">
+                        <div style="background: #28a745; color: white; padding: 15px; border-radius: 10px; margin-bottom: 10px;">
+                            <strong>Absorbing Phase</strong>
+                        </div>
+                        <p>Input message bits are absorbed into the internal state</p>
+                    </div>
+                    <div style="font-size: 2em; color: #007bff; align-self: center;">→</div>
+                    <div style="text-align: center;">
+                        <div style="background: #dc3545; color: white; padding: 15px; border-radius: 10px; margin-bottom: 10px;">
+                            <strong>Squeezing Phase</strong>
+                        </div>
+                        <p>Hash output bits are extracted from the state</p>
+                    </div>
+                </div>
+            </div>
+
+            <h2>🔧 Internal Structure: Non-Linear Feedback Shift Registers</h2>
+            
+            <p>The core of Hash-One consists of two Non-Linear Feedback Shift Registers (NFSRs) that work together to provide cryptographic security:</p>
+
+            <div class="nfsr-diagram">
+                <div class="nfsr-box">
+                    NFSR P<br>
+                    80 bits
+                </div>
+                <div class="arrow">⊕</div>
+                <div class="nfsr-box">
+                    NFSR Q<br>
+                    81 bits
+                </div>
+            </div>
+
+            <div class="step-box">
+                <h3><div class="step-number">1</div> State Initialization</h3>
+                <p><strong>Mathematical Foundation:</strong> The internal state is initialized using the first 161 bits of the mathematical constant π (pi).</p>
+                
+                <div class="formula-box">
+                    π = 3.141592653589793238462643383279502884197169399375...
+                    
+                    Binary representation of fractional part:
+                    0.001001000011111101101010100010001000010110100011...
+                </div>
+
+                <p><strong>Why π?</strong></p>
+                <ul>
+                    <li><strong>No hidden trapdoors:</strong> π is a well-known mathematical constant</li>
+                    <li><strong>Randomness:</strong> The decimal expansion appears random</li>
+                    <li><strong>Reproducibility:</strong> Same initialization every time</li>
+                    <li><strong>Cryptographic strength:</strong> Provides a strong starting point</li>
+                </ul>
+
+                <div class="highlight">
+                    <strong>🔍 Implementation Detail:</strong> The first 161 bits of π are computed by converting the fractional part to binary using successive multiplication by 2.
+                </div>
+            </div>
+
+            <div class="step-box">
+                <h3><div class="step-number">2</div> Absorbing Phase</h3>
+                <p>During the absorbing phase, message bits are incorporated into the internal state one bit at a time. The process varies based on the message structure:</p>
+
+                <h4>🔸 Case 1: Empty Message (k = 0)</h4>
+                <div class="code-block">
+                    if (message_length == 0) {
+                        updateFunction(state, 324); // 324 rounds of permutation
+                    }
+                </div>
+
+                <h4>🔸 Case 2: Single Bit Message (k = 1)</h4>
+                <div class="code-block">
+                    if (message_length == 1) {
+                        state[160] ^= message[0];    // XOR with rate bit
+                        updateFunction(state, 324);  // 324 rounds
+                    }
+                </div>
+
+                <h4>🔸 Case 3: Multi-bit Message (k > 1)</h4>
+                <div class="code-block">
+                    // First message bit
+                    state[160] ^= message[0];
+                    updateFunction(state, 324);  // 324 rounds
+                    
+                    // Intermediate bits (1 to k-2)
+                    for (i = 1; i < k-1; i++) {
+                        state[160] ^= message[i];
+                        updateFunction(state, 162);  // 162 rounds each
+                    }
+                    
+                    // Last message bit
+                    state[160] ^= message[k-1];
+                    updateFunction(state, 324);  // 324 rounds
+                </div>
+
+                <div class="highlight">
+                    <strong>⚡ Performance Note:</strong> The first and last message bits require 324 rounds of permutation, while intermediate bits only need 162 rounds, optimizing the overall performance.
+                </div>
+            </div>
+
+            <div class="step-box">
+                <h3><div class="step-number">3</div> Permutation Function (Core Security)</h3>
+                <p>The permutation function is the heart of Hash-One's security. It uses carefully designed Boolean functions to update the NFSRs:</p>
+
+                <h4>🔹 Boolean Function Definitions</h4>
+                <div class="formula-box">
+                    Pf(P₀, P₁₁, Q₂₃, P₅₅) = (P₀ ∧ P₁₁) ⊕ (P₀ ∧ P₅₅) ⊕ (P₁₁ ∧ Q₂₃) ⊕ (Q₂₃ ∧ P₅₅) ⊕ Q₂₃ ⊕ P₅₅ ⊕ 1
+
+                    Qf(Q₀, Q₂₅, Q₄₁, P₄₈) = (Q₂₅ ∧ P₄₈) ⊕ (Q₂₅ ∧ Q₄₁) ⊕ (Q₀ ∧ P₄₈) ⊕ (Q₀ ∧ Q₄₁) ⊕ Q₂₅ ⊕ Q₄₁
+
+                    Lf(P₁, Q₁, P₅₀) = P₁ ⊕ Q₁ ⊕ P₅₀
+                </div>
+
+                <h4>🔹 Register Update Process</h4>
+                <div class="code-block">
+                    // Calculate feedback bits
+                    newP79 = Pf ⊕ Lf;
+                    newQ80 = Qf ⊕ Lf;
+                    
+                    // Shift registers left and insert new bits
+                    for (i = 0; i < 79; i++) {
+                        P[i] = P[i+1];
+                    }
+                    P[79] = newP79;
+                    
+                    for (i = 0; i < 80; i++) {
+                        Q[i] = Q[i+1];
+                    }
+                    Q[80] = newQ80;
+                </div>
+
+                <p><strong>Security Properties:</strong></p>
+                <ul>
+                    <li><strong>Non-linearity:</strong> AND operations prevent linear cryptanalysis</li>
+                    <li><strong>Diffusion:</strong> Each bit influences multiple output bits</li>
+                    <li><strong>Confusion:</strong> Complex relationship between input and output</li>
+                    <li><strong>Avalanche Effect:</strong> Small input changes cause large output changes</li>
+                </ul>
+            </div>
+
+            <div class="step-box">
+                <h3><div class="step-number">4</div> Squeezing Phase</h3>
+                <p>After absorbing all message bits, the squeezing phase extracts the final hash output:</p>
+
+                <div class="code-block">
+                    hashOutput = [];
+                    for (i = 0; i < 160; i++) {
+                        updateFunction(state, 1);      // Single permutation round
+                        hashOutput[i] = state[160];    // Extract rate bit
+                    }
+                    
+                    // Replace first 160 state bits with squeezed output
+                    for (i = 0; i < 160; i++) {
+                        state[i] = hashOutput[i];
+                    }
+                </div>
+
+                <p><strong>Key Characteristics:</strong></p>
+                <ul>
+                    <li><strong>Bit-by-bit extraction:</strong> One bit per permutation round</li>
+                    <li><strong>160 output bits:</strong> Provides 80-bit security level</li>
+                    <li><strong>Rate position:</strong> Output comes from state[160]</li>
+                    <li><strong>State update:</strong> Maintains internal security</li>
+                </ul>
+            </div>
+
+            <h2>🛡️ Security Analysis</h2>
+
+            <div class="step-box">
+                <h3><div class="step-number">🔒</div> Cryptographic Properties</h3>
+                
+                <h4>🔹 Collision Resistance</h4>
+                <p>Hash-One provides 80-bit collision resistance, meaning an attacker needs approximately 2⁸⁰ operations to find two different inputs that produce the same hash output.</p>
+
+                <h4>🔹 Preimage Resistance</h4>
+                <p>Given a hash output, finding an input that produces that hash requires approximately 2¹⁶⁰ operations, making it computationally infeasible.</p>
+
+                <h4>🔹 Second Preimage Resistance</h4>
+                <p>Given an input and its hash, finding a different input with the same hash requires approximately 2¹⁶⁰ operations.</p>
+
+                <h4>🔹 Avalanche Effect</h4>
+                <p>Changing a single input bit results in approximately 50% of the output bits changing, ensuring high sensitivity to input modifications.</p>
+            </div>
+
+            <h2>⚡ Performance Characteristics</h2>
+
+            <div class="step-box">
+                <h3><div class="step-number">📊</div> Hardware Implementation</h3>
+                
+                <table class="spec-table">
+                    <tr>
+                        <th>Metric</th>
+                        <th>Value</th>
+                        <th>Comparison</th>
+                    </tr>
+                    <tr>
+                        <td>Gate Equivalents</td>
+                        <td>1006 GE</td>
+                        <td>Significantly lower than SHA-256 (~10,000+ GE)</td>
+                    </tr>
+                    <tr>
+                        <td>Throughput</td>
+                        <td>1 bit/cycle</td>
+                        <td>Optimized for low-power applications</td>
+                    </tr>
+                    <tr>
+                        <td>Clock Cycles</td>
+                        <td>Variable</td>
+                        <td>Depends on message length and phases</td>
+                    </tr>
+                    <tr>
+                        <td>Power Consumption</td>
+                        <td>Very Low</td>
+                        <td>Suitable for battery-powered devices</td>
+                    </tr>
+                </table>
+            </div>
+
+            <h2>🎯 Use Cases and Applications</h2>
+
+            <div class="step-box">
+                <h3><div class="step-number">🌐</div> Ideal Applications</h3>
+                
+                <ul>
+                    <li><strong>RFID Tags:</strong> Authentication and data integrity in supply chains</li>
+                    <li><strong>Wireless Sensor Networks:</strong> Secure data transmission with minimal power</li>
+                    <li><strong>IoT Devices:</strong> Lightweight security for connected devices</li>
+                    <li><strong>Smart Cards:</strong> Secure storage and authentication</li>
+                    <li><strong>Medical Implants:</strong> Security with strict power constraints</li>
+                    <li><strong>Automotive Systems:</strong> Secure communication in vehicle networks</li>
+                </ul>
+
+                <div class="highlight">
+                    <strong>💡 Educational Note:</strong> This implementation serves as an educational demonstration of lightweight cryptographic principles and should undergo thorough security analysis before production use.
+                </div>
+            </div>
+
+            <h2>📚 Implementation Considerations</h2>
+
+            <div class="step-box">
+                <h3><div class="step-number">⚠️</div> Important Notes</h3>
+                
+                <h4>🔹 Browser Implementation Limitations</h4>
+                <ul>
+                    <li><strong>Processing Speed:</strong> JavaScript bit-by-bit processing can be slow</li>
+                    <li><strong>File Size Limits:</strong> Recommended maximum of 100KB for responsive experience</li>
+                    <li><strong>Memory Usage:</strong> Large files may consume significant browser memory</li>
+                </ul>
+
+                <h4>🔹 Production Implementation</h4>
+                <ul>
+                    <li><strong>Hardware Optimization:</strong> Direct hardware implementation provides optimal performance</li>
+                    <li><strong>Software Optimization:</strong> Batch processing and lookup tables can improve speed</li>
+                    <li><strong>Security Validation:</strong> Thorough cryptanalysis required for mission-critical applications</li>
+                </ul>
+            </div>
+
+            <div class="highlight">
+                <strong>🎓 Academic Purpose:</strong> This detailed explanation is designed for educational understanding of lightweight cryptographic hash functions. The Hash-One algorithm represents an important advancement in constrained-device cryptography, balancing security requirements with resource limitations.
+            </div>
+
+            <p style="text-align: center; margin-top: 3rem;">
+                <a href="../index.html" class="button" style="display: inline-block; padding: 15px 30px; background: linear-gradient(135deg, #007bff, #0056b3); color: white; text-decoration: none; border-radius: 25px; font-weight: bold; box-shadow: 0 8px 25px rgba(0, 123, 255, 0.3);">
+                    ← Return to Introduction
+                </a>
+                <a href="hashone_generator_final.html" class="button" style="display: inline-block; padding: 15px 30px; background: linear-gradient(135deg, #28a745, #20c997); color: white; text-decoration: none; border-radius: 25px; font-weight: bold; box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);">
+                    Generate a Hash →
+                </a>
+            </p>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 Hash-One. All rights reserved.</p>
+        <p>This project is for educational purposes only.</p>
+    </footer>
+
+</body>
+</html>
